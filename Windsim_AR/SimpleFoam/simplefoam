@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# This is the bash file which runs the commands to run Openfoam and Paraview for wind simulation.Please edit the lines as mentioned when setting up the sandbox. 
+# Please Edit the lines 7 , 30 and 31 with their appropriate directories. 
+username=$(whoami)
+cd ${0%/*} || exit 1  # run from this directory
+
+
+surfaceTransformPoints constant/triSurface/depth_img.stl constant/triSurface/depth_img.stl -scale "(1 1 -1)"
+
+blockMesh 
+decomposePar
+mpirun -n 4 snappyHexMesh -parallel
+reconstructParMesh
+cp -R 9/polyMesh constant
+rm -rf 3
+rm -rf 6 
+rm -rf 9 
+rm -rf processor0
+rm -rf processor1
+rm -rf processor2
+rm -rf processor3
+decomposePar
+mpirun -n 4 simpleFoam -parallel
+reconstructPar
+
+if [ -d /home/$username/Windsim_AR/SimpleFoam/0 ];  
+then 
+
+    cd /home/$username/ParaView-5.5.2-Qt5-MPI-Linux-64bit/bin # *******EDIT THIS LINE FOR NEW SETUP IF NOT IN HOME DIRECTORY*******
+    ./pvpython /home/$username/Windsim_AR/SimpleFoam/para_viz.py # *******EDIT THIS LINE FOR NEW SETUP********
+
+fi
+
+rm -rf constant/extendedFeatureEdgeMesh
+rm -rf constant/polyMesh

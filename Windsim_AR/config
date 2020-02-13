@@ -1,0 +1,6 @@
+xCells:     40
+yCells:     30
+zCells:     15
+Uref:       10
+Zref:       10
+z0: uniform 0.1

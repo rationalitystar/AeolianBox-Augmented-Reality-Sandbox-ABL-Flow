@@ -1,0 +1,65 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+
+internalField   0; 
+
+
+boundaryField
+{
+    outlet
+    {
+type            fixedValue;
+ value              uniform 0;  
+         // Flip this with zero gradient vs 0 in velocity after ABL conditions fix. 
+         
+    }
+
+    inlet
+    {
+       type zeroGradient; 
+   }
+
+
+  
+  ground
+   {
+    type slip;
+   }
+
+   sides
+   {
+    type slip;
+   }
+
+   depth_img 
+   { 
+
+   type zeroGradient;
+   
+   } 
+  top
+    {
+        type            slip;
+    }
+
+
+ 
+}
+
+// ************************************************************************* //
